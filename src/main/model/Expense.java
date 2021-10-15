@@ -14,9 +14,11 @@ public class Expense {
      * REQUIRES: amount must be positive; category of expense
      *           must be from: food, rent, medical,
      *           clothing, entertainment;
-     *           month string has the format "year-month", ex. "2000-04"
+     *           month string has the format "year-month", ex. "2000-04",
+     *           in string "year-month", "-month" <= 12
      * EFFECTS:  dollar amount of expense is set to amount;
-     *           category of expense is assigned to category
+     *           category of expense is assigned to category,
+     *           string category will always be lowercase
      *           month on which money was spent is assigned to month
      */
     public Expense(double amount, String category, String month) {

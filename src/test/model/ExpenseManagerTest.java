@@ -1,10 +1,63 @@
 package model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExpenseManagerTest {
+    private ExpenseManager myExpenses;
+    private Expense shoes;
+    private Expense newShoes;
+    private Expense groceries;
+    private Expense dinner;
+    private Expense concertTicket;
+    private Expense party;
+    private Expense augustRent;
+    private Expense julyRent;
+    private Expense brokenArm;
+    private Expense brokenRibs;
+
+
+    @BeforeEach
+    void runBefore() {
+        //clothing expenses, spent on 2021-10
+        shoes = new Expense(10, "clothing", "2021-10");
+        newShoes = new Expense(40, "clothing", "2021-10");
+
+        //food expenses, spent on 2021-10
+        groceries = new Expense(100, "food", "2021-10");
+        dinner = new Expense(30, "food", "2021-10");
+
+        //entertainment expenses
+        concertTicket = new Expense(500, "entertainment", "2021-01");
+        party = new Expense(100, "entertainment", "2021-02");
+
+        //rent expenses
+        julyRent = new Expense (1000, "rent", "2021-07");
+        augustRent =  new Expense(1000, "rent", "2021-08");
+
+        //medical expenses
+        brokenArm = new Expense (6000, "medical", "2021-07");
+        brokenRibs = new Expense(7000, "medical", "2021-06");
+
+        //new expense manager
+        myExpenses = new ExpenseManager();
+
+        //adding expenses to expense manager
+        myExpenses.addExpense(shoes);
+        myExpenses.addExpense(newShoes);
+        myExpenses.addExpense(groceries);
+        myExpenses.addExpense(dinner);
+        myExpenses.addExpense(concertTicket);
+        myExpenses.addExpense(party);
+        myExpenses.addExpense(julyRent);
+        myExpenses.addExpense(augustRent);
+        myExpenses.addExpense(brokenArm);
+        myExpenses.addExpense(brokenRibs);
+
+    }
 
     @Test
     public void testConstructor() {
@@ -14,72 +67,98 @@ public class ExpenseManagerTest {
     }
 
     @Test
-    public void testAddExpense() {
+    public void testOneAddExpense() {
         double a = 10;
         String c = "clothing";
         String m = "2021-10";
-        Expense shoe = new Expense(a, c, m);
+        Expense item = new Expense(a, c, m);
 
-        ExpenseManager myExpenses = new ExpenseManager();
-        myExpenses.addExpense(shoe);
+        ExpenseManager coolExpenses = new ExpenseManager();
+        coolExpenses.addExpense(item);
 
-        int len = myExpenses.numberOfExpenses();
-
+        int len = coolExpenses.numberOfExpenses();
         assertEquals(1, len);
-        //do I need to make sure the expense I added is the correct one?
-        //if so how?
-        //im thinking I need to add a unique identifier to expenses?
+
+        Expense fetchedExpense = coolExpenses.getExpense(0);
+        assertEquals(a, fetchedExpense.getAmount());
+        assertTrue(c.equals(fetchedExpense.getCategory()));
+        assertTrue(m.equals(fetchedExpense.getMonth()));
+    }
+
+    @Test
+    public void testAddMultipleExpenses() {
+        Expense itemOne = new Expense(10, "clothing", "2021-10");
+        Expense itemTwo = new Expense(20, "food", "2021-10");
+        Expense itemThree = new Expense(30, "entertainment", "2021-10");
+
+        int itemOnePrice = 10;
+        int itemTwoPrice = 20;
+        int itemThreePrice = 30;
+
+        ExpenseManager amazingExpenses = new ExpenseManager();
+        assertEquals(0, amazingExpenses.numberOfExpenses());
+
+        amazingExpenses.addExpense(itemOne);
+        amazingExpenses.addExpense(itemTwo);
+        amazingExpenses.addExpense(itemThree);
+        assertEquals(3, amazingExpenses.numberOfExpenses());
+
+        Expense fetchedItem1 = amazingExpenses.getExpense(0);
+        assertEquals(itemOnePrice, fetchedItem1.getAmount());
+
+        Expense fetchedItem2 = amazingExpenses.getExpense(1);
+        assertEquals(itemTwoPrice, fetchedItem2.getAmount());
+
+        Expense fetchedItem3 = amazingExpenses.getExpense(2);
+        assertEquals(itemThreePrice, fetchedItem3.getAmount());
     }
 
     @Test
     public void testGetMonthlyTotalWithMultipleExpensesInList() {
-        Expense shoe = new Expense(10, "clothing", "2021-10");
-        Expense groceries = new Expense(100, "food", "2021-10");
-        Expense concertTicket = new Expense(500, "entertainment", "2021-10");
-
-        Expense newShoe = new Expense(100, "clothing", "2021-09");
-        Expense augustRent = new Expense(1000, "rent", "2021-08");
-        Expense augustJuly = new Expense (1000, "rent", "2021-07");
-
-        ExpenseManager myExpenses = new ExpenseManager();
-        myExpenses.addExpense(shoe);
-        myExpenses.addExpense(groceries);
-        myExpenses.addExpense(concertTicket);
-        myExpenses.addExpense(newShoe);
-        myExpenses.addExpense(augustRent);
-        myExpenses.addExpense(augustJuly);
-
-        //how can I make this test more clean?
-
         double octoberTotal = myExpenses.getMonthlyTotal("2021-10");
+        double matchThis = shoes.getAmount() + newShoes.getAmount() + groceries.getAmount() + dinner.getAmount();
 
-        assertEquals(610, octoberTotal);
+        assertEquals(matchThis, octoberTotal);
     }
 
     @Test
-    public void testGetMonthlyTotalForCategory() {
-        Expense shoe = new Expense(15, "clothing", "2021-10");
-        Expense shirts = new Expense(500, "clothing", "2021-10");
-        Expense groceries = new Expense(100, "food", "2021-10");
-        Expense concertTicket = new Expense(500, "entertainment", "2021-10");
+    public void testGetMonthlyTotalForFoodCategory() {
+        double octoberAndFood = myExpenses.getMonthlyTotalForCategory("food", "2021-10");
+        double matchThis = groceries.getAmount() + dinner.getAmount();
 
-        Expense newShoe = new Expense(100, "clothing", "2021-09");
-        Expense augustRent = new Expense(1000, "rent", "2021-08");
-        Expense augustJuly = new Expense (1000, "rent", "2021-07");
+        assertEquals(matchThis, octoberAndFood);
+    }
 
-        ExpenseManager myExpenses = new ExpenseManager();
-        myExpenses.addExpense(shoe);
-        myExpenses.addExpense(shirts);
-        myExpenses.addExpense(groceries);
-        myExpenses.addExpense(concertTicket);
-        myExpenses.addExpense(newShoe);
-        myExpenses.addExpense(augustRent);
-        myExpenses.addExpense(augustJuly);
+    @Test
+    void getMonthlyTotalForRentCategory() {
+        double julyAndRent = myExpenses.getMonthlyTotalForCategory("rent", "2021-07");
+        double matchThis = julyRent.getAmount();
 
-        double octoberClothingTotal = myExpenses.getMonthlyTotalForCategory("clothing", "2021-10");
+        assertEquals(matchThis, julyAndRent );
+    }
 
-        assertEquals(515, octoberClothingTotal);
+    @Test
+    void getMonthlyTotalForMedicalCategory() {
+        double juneAndMedical = myExpenses.getMonthlyTotalForCategory("medical", "2021-06");
+        double matchThis = brokenRibs.getAmount();
 
+        assertEquals(matchThis, juneAndMedical);
+    }
+
+    @Test
+    void getMonthlyTotalForClothingCategory() {
+        double octoberAndClothing = myExpenses.getMonthlyTotalForCategory("clothing", "2021-10");
+        double matchThis = shoes.getAmount() + newShoes.getAmount();
+
+        assertEquals(matchThis, octoberAndClothing);
+    }
+
+    @Test
+    void getMonthlyTotalForEntertainmentCategory() {
+        double janAndEntertainment =  myExpenses.getMonthlyTotalForCategory("entertainment", "2021-01" );
+        double matchThis = concertTicket.getAmount();
+
+        assertEquals(matchThis, janAndEntertainment);
     }
 
 }

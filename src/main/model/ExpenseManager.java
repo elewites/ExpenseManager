@@ -2,13 +2,14 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-// Represents container where the user can add expenses, and check total money spent
-// for specific a specific month or category
+// Represents a container where the user can add their expenses, and check the total money spent
+// for specific month or category
 public class ExpenseManager {
     private List<Expense> expenses;         //list of expenses
 
-    //EFFECTS: initializes expense manager with an empty array
+    //EFFECTS: initializes an expense manager with an empty array list
     public ExpenseManager() {
         expenses = new ArrayList<>();
     }
@@ -24,7 +25,13 @@ public class ExpenseManager {
         expenses.add(e);
     }
 
-    //REQUIRES: m must have the format "year-month", ex. "2000-04"
+    //EFFECTS: returns expense at index i
+    public Expense getExpense(int i) {
+        return expenses.get(i);
+    }
+
+    //REQUIRES: m must have the format "year-month", ex. "2000-04",
+    //          in string "year-month", "-month" <= 12
     //EFFECTS: returns total money spent in month m
     public double getMonthlyTotal(String m) {
         double total = 0;
@@ -39,9 +46,10 @@ public class ExpenseManager {
     }
 
     /*
-     * REQUIRES: c must be string food, rent, medical
-     *           clothing, or entertainment
-     *           m must have the format "year-month"
+     * REQUIRES: cat must be one of the following strings: food, rent, medical
+     *           clothing, or entertainment, not case-sensitive;
+     *           m must have the format "year-month",
+     *           in string "year-month", "-month" <= 12
      * EFFECTS: returns total money spent for category cat and month m
      */
     public double getMonthlyTotalForCategory(String cat, String m) {
@@ -50,7 +58,7 @@ public class ExpenseManager {
             String expenseMonth = e.getMonth();
             String expenseCategory = e.getCategory();
             double expenseAmount = e.getAmount();
-            if (expenseMonth.equals(m) && expenseCategory.equals(cat)) {
+            if (expenseMonth.equals(m) && expenseCategory.equals(cat.toLowerCase(Locale.ROOT))) {
                 total += expenseAmount;
             }
         }

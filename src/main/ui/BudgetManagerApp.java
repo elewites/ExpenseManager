@@ -121,12 +121,13 @@ public class BudgetManagerApp {
     public void categoryMonthExpense() {
         String month;
         String category;
+
         System.out.println("For what category would you like to look at your balance:");
-        category = input.next().toLowerCase(Locale.ROOT);
+        category = input.next();
 
         System.out.println("And for what month? Format for date should be year-month");
         System.out.println("ex. 2021-08, 2021-11, et.c");
-        month = input.next().toLowerCase();
+        month = input.next();
 
         double monthlyExpense = myExpenses.getMonthlyTotalForCategory(category, month);
 
