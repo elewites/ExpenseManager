@@ -1,28 +1,27 @@
 package model;
 
-import java.util.Locale;
 
-// Represents an expense having an amount in dollars, category, and
-// the month in which that dollar amount was spent
+/* Represents an expense with an amount in dollars,
+ * category (food, rent, medical, clothing, entertainment), and
+ * month in which that dollar amount was spent
+ */
 public class Expense {
     private double amount;            //amount of money spent
-    private String category;       //category of expense
-    private String month;          //month in which amount was spent
+    private String category;          //category of expense
+    private String month;             //month in which amount was spent
 
     /*
      * REQUIRES: amount must be positive; category of expense
-     *           must be food, rent, medical,
-     *           clothing, or entertainment;
-     *           month must have the format "year-month", ex. "2000-04",
-     *           and month must be < 12
-     * EFFECTS: dollar amount of expense is set to amount;
-     *          category of expense is assigned to category
-     *          month on which money was spent is assigned to month
+     *           must be from: food, rent, medical,
+     *           clothing, entertainment;
+     *           month string has the format "year-month", ex. "2000-04"
+     * EFFECTS:  dollar amount of expense is set to amount;
+     *           category of expense is assigned to category
+     *           month on which money was spent is assigned to month
      */
     public Expense(double amount, String category, String month) {
         this.amount = amount;
-        String c = category.toLowerCase(Locale.ROOT);
-        this.category = c;
+        this.category = category.toLowerCase();
         this.month = month;
     }
 
