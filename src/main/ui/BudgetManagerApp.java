@@ -3,7 +3,6 @@ package ui;
 import model.Expense;
 import model.ExpenseManager;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 //Budget manager Application
@@ -53,7 +52,7 @@ public class BudgetManagerApp {
 
 
     //MODIFIES: this
-    //EFFECTS: initializes expense manager
+    //EFFECTS: initializes an empty expense manager
     public void init() {
         myExpenses = new ExpenseManager();
         input = new Scanner(System.in);
@@ -69,7 +68,7 @@ public class BudgetManagerApp {
         System.out.println("\nSelect from:");
         System.out.println("\tadd   -> Add an expense to your budget manager");
         System.out.println("\ttm  -> Look at the total money you have spent in a given month");
-        System.out.println("\ttmc -> Look at the total money you spent per category of expense in a given month");
+        System.out.println("\ttmc -> Look at the total money you spent for a category of expense in a given month");
         System.out.println("\tq -> quit");
     }
 
@@ -84,14 +83,11 @@ public class BudgetManagerApp {
         System.out.println("Food, Rent, Medical, Clothing, Entertainment");
         category = input.next();
 
-        System.out.println("\nInput amount of expense (dollar):");
+        System.out.println("\nInput amount of expense (dollars):");
         amount = input.nextDouble();
 
         System.out.println("\nInput the date in which you spent the following amount: " + amount + " dollar/s");
-        System.out.println("\nFormat for date should be year-month");
-        System.out.println("Ex. 2021-08, 2021-11, etc.");
-        System.out.println("Date: ");
-        date = input.next();
+        date = chooseMonthHelper();
 
         System.out.println("\nCategory: " + category);
         System.out.println("Amount: $" + amount);
@@ -106,10 +102,7 @@ public class BudgetManagerApp {
     public void monthExpense() {
         String month;
         System.out.println("For what month would you like to look at your balance:");
-        System.out.println("Format for date should be year-month");
-        System.out.println("Ex. 2021-08, 2021-11, etc.");
-        System.out.println("Date: ");
-        month = input.next();
+        month = chooseMonthHelper();
 
         double monthlyTotal = myExpenses.getMonthlyTotal(month);
 
@@ -125,14 +118,21 @@ public class BudgetManagerApp {
         System.out.println("For what category would you like to look at your balance:");
         category = input.next();
 
-        System.out.println("And for what month? Format for date should be year-month");
-        System.out.println("ex. 2021-08, 2021-11, et.c");
-        month = input.next();
+        System.out.println("And for what month?");
+        month = chooseMonthHelper();
 
         double monthlyExpense = myExpenses.getMonthlyTotalForCategory(category, month);
 
         System.out.println("\nExpenses for category " + category + " in month " + month);
         System.out.println("$" + monthlyExpense);
     }
+
+    //EFFECTS: returns the month which the user selected in format "year-month"
+    public String chooseMonthHelper() {
+        System.out.println("Format for date should be year-month, Ex. 2021-08, 2021-11, etc.");
+        System.out.println("Date: ");
+        return input.next();
+    }
+
 
 }

@@ -30,17 +30,17 @@ public class ExpenseManagerTest {
         groceries = new Expense(100, "food", "2021-10");
         dinner = new Expense(30, "food", "2021-10");
 
-        //entertainment expenses
+        //entertainment expenses, include months: 2021-01 and 2021-02
         concertTicket = new Expense(500, "entertainment", "2021-01");
         party = new Expense(100, "entertainment", "2021-02");
 
-        //rent expenses
+        //rent expenses, include months: 2021-07 and 2021-08
         julyRent = new Expense (1000, "rent", "2021-07");
         augustRent =  new Expense(1000, "rent", "2021-08");
 
-        //medical expenses
-        brokenArm = new Expense (6000, "medical", "2021-07");
+        //medical expenses, include months: 2021-06 and 2021-07
         brokenRibs = new Expense(7000, "medical", "2021-06");
+        brokenArm = new Expense (6000, "medical", "2021-07");
 
         //new expense manager
         myExpenses = new ExpenseManager();
@@ -114,11 +114,19 @@ public class ExpenseManagerTest {
     }
 
     @Test
-    public void testGetMonthlyTotalWithMultipleExpensesInList() {
+    public void testGetMonthlyTotalWithMultipleExpensesInListForOctober() {
         double octoberTotal = myExpenses.getMonthlyTotal("2021-10");
         double matchThis = shoes.getAmount() + newShoes.getAmount() + groceries.getAmount() + dinner.getAmount();
 
         assertEquals(matchThis, octoberTotal);
+    }
+
+    @Test
+    public void testGetMonthlyTotalForJuly () {
+        double julyTotal = myExpenses.getMonthlyTotal("2021-07");
+        double matchThis =  julyRent.getAmount() + brokenArm.getAmount();
+
+        assertEquals(matchThis, julyTotal);
     }
 
     @Test
