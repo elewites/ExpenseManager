@@ -3,11 +3,11 @@ package ui;
 import model.Expense;
 import model.ExpenseManager;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 //Budget manager Application
+//Code for interface based on CPSC 210 TellerApp
 public class BudgetManagerApp {
     private ExpenseManager myExpenses;
     private Scanner input;
@@ -20,15 +20,14 @@ public class BudgetManagerApp {
     //MODIFIES: this
     //EFFECTS: processes user input
     public void runManager() {
-        boolean keepGoing = true;;
-        String command = null;
+        boolean keepGoing = true;
+        String command;
 
         init();
 
         while (keepGoing) {
             displayMenu();
             command = input.next();
-            command.toLowerCase();
 
             if (command.equals("q")) {
                 keepGoing = false;
@@ -41,7 +40,7 @@ public class BudgetManagerApp {
     //MODIFIES: this
     //EFFECTS: processes user command c
     public void processCommand(String c) {
-        if (c.equals("a")) {
+        if (c.equals("add")) {
             addExpense();
         } else if (c.equals("tm")) {
             monthExpense();
@@ -68,7 +67,7 @@ public class BudgetManagerApp {
     //EFFECTS: displays menu  of options to user
     public void displayMenu() {
         System.out.println("\nSelect from:");
-        System.out.println("\ta   -> Add an expense to your budget manager");
+        System.out.println("\tadd   -> Add an expense to your budget manager");
         System.out.println("\ttm  -> Look at the total money you have spent in a given month");
         System.out.println("\ttmc -> Look at the total money you spent per category of expense in a given month");
         System.out.println("\tq -> quit");
@@ -77,11 +76,11 @@ public class BudgetManagerApp {
     //MODIFIES: this
     //EFFECTS: adds an expense to expense manager
     public void addExpense() {
-        double amount = 0;
-        String category = "ok";
-        String date = "year-month";
+        double amount;
+        String category;
+        String date;
 
-        System.out.println("Chose one of the following categories of expense:");
+        System.out.println("\nChose one of the following categories of expense:");
         System.out.println("Food, Rent, Medical, Clothing, Entertainment");
         category = input.next();
 
@@ -89,7 +88,7 @@ public class BudgetManagerApp {
         amount = input.nextDouble();
 
         System.out.println("\nInput the date in which you spent the following amount: " + amount + " dollar/s");
-        System.out.println("Format for date should be year-month");
+        System.out.println("\nFormat for date should be year-month");
         System.out.println("Ex. 2021-08, 2021-11, etc.");
         System.out.println("Date: ");
         date = input.next();
@@ -105,7 +104,7 @@ public class BudgetManagerApp {
 
     //EFFECTS: returns total amount of money spent for a given month
     public void monthExpense() {
-        String month = "year-month";
+        String month;
         System.out.println("For what month would you like to look at your balance:");
         System.out.println("Format for date should be year-month");
         System.out.println("Ex. 2021-08, 2021-11, etc.");
@@ -120,8 +119,8 @@ public class BudgetManagerApp {
 
     //EFFECTS: returns total amount of money spent monthly on a given category of expense
     public void categoryMonthExpense() {
-        String month = "year-month";
-        String category = "string";
+        String month;
+        String category;
         System.out.println("For what category would you like to look at your balance:");
         category = input.next().toLowerCase(Locale.ROOT);
 
