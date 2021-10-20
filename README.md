@@ -34,7 +34,7 @@ becomes tedious quite fast.
 With the creation of this app I intend ease the
 burdens of such process.
 
-## User Stories
+### Phase 1 User Stories
 1. As a user, I want to be able to add an expense 
 to my list of expenses for a given month
 2. As a user, I want to be able to view how much 
@@ -43,4 +43,10 @@ money I have spent on a given month
 as I am adding them to my monthly expense list
 4. As a user, I want to be able to view total expenses
 per category
+
+### Phase 2 User Stories
+1. As a user, when I select the quit option from the application menu, 
+I want to be reminded to save the changes made to my budget manager. 
+2. As a user, when I start my budget manager, I want to be given
+the option to load my expenses from file. 
 
