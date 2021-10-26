@@ -30,39 +30,39 @@ public class ExpenseManager {
         return expenses.get(i);
     }
 
-    //REQUIRES: m must have the format "year-month", ex. "2000-04",
-    //          in string "year-month", "-month" <= 12
-    //EFFECTS: returns total money spent in month m
-    public double getMonthlyTotal(String m) {
-        double total = 0;
-        for (Expense e: expenses) {
-            String expenseMonth = e.getMonth();
-            double expenseAmount = e.getAmount();
-            if (expenseMonth.equals(m)) {
-                total += expenseAmount;
-            }
-        }
-        return total;
-    }
-
-    /*
-     * REQUIRES: cat must be one of the following strings: food, rent, medical
-     *           clothing, or entertainment, not case-sensitive;
-     *           m must have the format "year-month",
-     *           in string "year-month", "-month" <= 12
-     * EFFECTS: returns total money spent for category cat and month m
-     */
-    public double getMonthlyTotalForCategory(String cat, String m) {
-        double total = 0;
-        for (Expense e: expenses) {
-            String expenseMonth = e.getMonth();
-            String expenseCategory = e.getCategory();
-            double expenseAmount = e.getAmount();
-            if (expenseMonth.equals(m) && expenseCategory.equals(cat.toLowerCase(Locale.ROOT))) {
-                total += expenseAmount;
-            }
-        }
-        return total;
-    }
+//    //REQUIRES: m must have the format "year-month", ex. "2000-04",
+//    //          in string "year-month", "-month" <= 12
+//    //EFFECTS: returns total money spent in month m
+//    public double getMonthlyTotal(String m) {
+//        double total = 0;
+//        for (Expense e: expenses) {
+//            String expenseMonth = e.getMonth();
+//            double expenseAmount = e.getAmount();
+//            if (expenseMonth.equals(m)) {
+//                total += expenseAmount;
+//            }
+//        }
+//        return total;
+//    }
+//
+//    /*
+//     * REQUIRES: cat must be one of the following strings: food, rent, medical
+//     *           clothing, or entertainment, not case-sensitive;
+//     *           m must have the format "year-month",
+//     *           in string "year-month", "-month" <= 12
+//     * EFFECTS: returns total money spent for category cat and month m
+//     */
+//    public double getMonthlyTotalForCategory(String cat, String m) {
+//        double total = 0;
+//        for (Expense e: expenses) {
+//            String expenseMonth = e.getMonth();
+//            String expenseCategory = e.getCategory();
+//            double expenseAmount = e.getAmount();
+//            if (expenseMonth.equals(m) && expenseCategory.equals(cat.toLowerCase(Locale.ROOT))) {
+//                total += expenseAmount;
+//            }
+//        }
+//        return total;
+//    }
 
 }
