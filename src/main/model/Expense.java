@@ -3,7 +3,6 @@ package model;
 
 import model.enums.ExpenseCategory;
 import model.enums.Month;
-import model.exceptions.DescriptionException;
 
 /* Represents an expense with an amount in dollars,
  * category (food, rent, medical, clothing, entertainment), and
@@ -16,7 +15,7 @@ public class Expense {
     private Month month;                       //month in which amount was spent
     private int year;                          //year in which amount was spent
 
-    /* REQUIRES: chosenDescription.length() <= 30;
+    /* REQUIRES: chosenDescription.length() <= 30, !chosenDescription.isEmpty(), !myDescription.equals(" ");
      *           expenseAmount > 0;
      *           chosenCategory is one of ExpenseCategory enums;
      *           chosenMonth is one of Month enums
@@ -60,10 +59,18 @@ public class Expense {
         return year;
     }
 
-
-
-
-
+    @Override
+    //EFFECTS: returns Expense formatted as a string
+    // e.g. "Expense { description: description, amount: amount, category: category, month: month, year: year } "
+    public String toString() {
+        return "Expense {"
+                + " description: " + description
+                + ", amount: $" + amount
+                + ", category: " + category
+                + ", month: " + month
+                + ", year: " + year
+                + " }";
+    }
 
     //HELPERS BELOW
 

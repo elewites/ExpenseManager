@@ -1,28 +1,32 @@
-//package model;
-//
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//
-//import static org.junit.jupiter.api.Assertions.assertEquals;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
-//
-//public class ExpenseManagerTest {
-//    private ExpenseManager myExpenses;
-//    private Expense shoes;
-//    private Expense newShoes;
-//    private Expense groceries;
-//    private Expense dinner;
-//    private Expense concertTicket;
-//    private Expense party;
-//    private Expense augustRent;
-//    private Expense julyRent;
-//    private Expense brokenArm;
-//    private Expense brokenRibs;
-//
-//
-//    @BeforeEach
-//    void runBefore() {
-//        //clothing expenses, spent on 2021-10
+package model;
+
+import model.enums.ExpenseCategory;
+import model.enums.Month;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import javax.management.monitor.Monitor;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class ExpenseManagerTest {
+    private ExpenseManager myExpenses;
+    private Expense shoes;
+    private Expense newShoes;
+    private Expense groceries;
+    private Expense dinner;
+    private Expense concertTicket;
+    private Expense party;
+    private Expense augustRent;
+    private Expense julyRent;
+    private Expense brokenArm;
+    private Expense brokenRibs;
+
+
+    @BeforeEach
+    void runBefore() {
+//        //clothing expenses
 //        shoes = new Expense(10, "clothing", "2021-10");
 //        newShoes = new Expense(40, "clothing", "2021-10");
 //
@@ -56,63 +60,83 @@
 //        myExpenses.addExpense(augustRent);
 //        myExpenses.addExpense(brokenArm);
 //        myExpenses.addExpense(brokenRibs);
-//
-//    }
-//
-//    @Test
-//    public void testConstructor() {
-//        ExpenseManager myExpenses = new ExpenseManager();
-//        int len = myExpenses.numberOfExpenses();
-//        assertEquals(0, len);
-//    }
-//
-//    @Test
-//    public void testOneAddExpense() {
-//        double a = 10;
-//        String c = "clothing";
-//        String m = "2021-10";
-//        Expense item = new Expense(a, c, m);
-//
-//        ExpenseManager coolExpenses = new ExpenseManager();
-//        coolExpenses.addExpense(item);
-//
-//        int len = coolExpenses.numberOfExpenses();
-//        assertEquals(1, len);
-//
-//        Expense fetchedExpense = coolExpenses.getExpense(0);
-//        assertEquals(a, fetchedExpense.getAmount());
-//        assertTrue(c.equals(fetchedExpense.getCategory()));
-//        assertTrue(m.equals(fetchedExpense.getMonth()));
-//    }
-//
-//    @Test
-//    public void testAddMultipleExpenses() {
-//        Expense itemOne = new Expense(10, "clothing", "2021-10");
-//        Expense itemTwo = new Expense(20, "food", "2021-10");
-//        Expense itemThree = new Expense(30, "entertainment", "2021-10");
-//
-//        int itemOnePrice = 10;
-//        int itemTwoPrice = 20;
-//        int itemThreePrice = 30;
-//
-//        ExpenseManager amazingExpenses = new ExpenseManager();
-//        assertEquals(0, amazingExpenses.numberOfExpenses());
-//
-//        amazingExpenses.addExpense(itemOne);
-//        amazingExpenses.addExpense(itemTwo);
-//        amazingExpenses.addExpense(itemThree);
-//        assertEquals(3, amazingExpenses.numberOfExpenses());
-//
-//        Expense fetchedItem1 = amazingExpenses.getExpense(0);
-//        assertEquals(itemOnePrice, fetchedItem1.getAmount());
-//
-//        Expense fetchedItem2 = amazingExpenses.getExpense(1);
-//        assertEquals(itemTwoPrice, fetchedItem2.getAmount());
-//
-//        Expense fetchedItem3 = amazingExpenses.getExpense(2);
-//        assertEquals(itemThreePrice, fetchedItem3.getAmount());
-//    }
-//
+
+    }
+
+    @Test
+    public void testConstructor() {
+        ExpenseManager myExpenses = new ExpenseManager();
+        int len = myExpenses.numberOfExpenses();
+        assertEquals(0, len);
+    }
+
+    @Test
+    public void testAddExpense() {
+        String description = "shoe";
+        double amount = 10;
+        ExpenseCategory category = ExpenseCategory.CLOTHING;
+        Month month = Month.APRIL;
+        int year = 2021;
+        Expense item = new Expense(description, amount, category, month, year);
+
+        ExpenseManager coolExpenses = new ExpenseManager();
+        coolExpenses.addExpense(item);
+
+        int len = coolExpenses.numberOfExpenses();
+        assertEquals(1, len);
+
+        Expense fetchedExpense = coolExpenses.getExpense(0);
+
+        assertEquals(amount, fetchedExpense.getAmount());
+        assertTrue(description.equals(fetchedExpense.getDescription()));
+        assertTrue(category.equals(fetchedExpense.getCategory()));
+        assertTrue(month.equals(fetchedExpense.getMonth()));
+        assertEquals(year, fetchedExpense.getYear());
+    }
+
+    @Test
+    public void testAddMultipleExpenses() {
+        Expense itemOne = new Expense("shoe", 10, ExpenseCategory.CLOTHING, Month.APRIL, 2021);
+        Expense itemTwo = new Expense("shoe", 20, ExpenseCategory.CLOTHING, Month.APRIL, 2021);
+        Expense itemThree = new Expense("shoe", 30, ExpenseCategory.CLOTHING, Month.APRIL, 2021);
+
+        int itemOnePrice = 10;
+        int itemTwoPrice = 20;
+        int itemThreePrice = 30;
+
+        ExpenseManager amazingExpenses = new ExpenseManager();
+        assertEquals(0, amazingExpenses.numberOfExpenses());
+
+        amazingExpenses.addExpense(itemOne);
+        amazingExpenses.addExpense(itemTwo);
+        amazingExpenses.addExpense(itemThree);
+        assertEquals(3, amazingExpenses.numberOfExpenses());
+
+        Expense fetchedItem1 = amazingExpenses.getExpense(0);
+        assertEquals(itemOnePrice, fetchedItem1.getAmount());
+
+        Expense fetchedItem2 = amazingExpenses.getExpense(1);
+        assertEquals(itemTwoPrice, fetchedItem2.getAmount());
+
+        Expense fetchedItem3 = amazingExpenses.getExpense(2);
+        assertEquals(itemThreePrice, fetchedItem3.getAmount());
+    }
+
+    @Test
+    void testTotal() {
+        Expense itemOne = new Expense("shoe", 10, ExpenseCategory.CLOTHING, Month.APRIL, 2021);
+        Expense itemTwo = new Expense("shoe", 20, ExpenseCategory.CLOTHING, Month.APRIL, 2021);
+        Expense itemThree = new Expense("shoe", 30, ExpenseCategory.CLOTHING, Month.APRIL, 2021);
+
+        ExpenseManager amazingExpenses = new ExpenseManager();
+
+        amazingExpenses.addExpense(itemOne);
+        amazingExpenses.addExpense(itemTwo);
+        amazingExpenses.addExpense(itemThree);
+
+        assertEquals(60, amazingExpenses.total());
+    }
+
 //    @Test
 //    public void testGetMonthlyTotalWithMultipleExpensesInListForOctober() {
 //        double octoberTotal = myExpenses.getMonthlyTotal("2021-10");
@@ -168,5 +192,5 @@
 //
 //        assertEquals(matchThis, janAndEntertainment);
 //    }
-//
-//}
+
+}

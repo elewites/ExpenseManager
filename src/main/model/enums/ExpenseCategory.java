@@ -7,11 +7,11 @@ public enum ExpenseCategory {
     CLOTHING("CLOTHING"),
     ENTERTAINMENT("ENTERTAINMENT");
 
-    private String category;
+    private String category;   //represents enum as a string
 
-    //EFFECTS: constructs an enum and associates it with a string cat
-    ExpenseCategory(String cat) {
-        category = cat;
+    //EFFECTS: constructs an enum and associates it with a string category
+    ExpenseCategory(String category) {
+        this.category = category;
     }
 
     //EFFECTS: returns category of enum

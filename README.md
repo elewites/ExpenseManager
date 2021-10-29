@@ -36,13 +36,39 @@ burdens of such process.
 
 ### Phase 1 User Stories
 1. As a user, I want to be able to add an expense 
-to my list of expenses for a given month
-2. As a user, I want to be able to view how much 
-money I have spent on a given month
-3. As a user, I want to be able to categorize my expenses
-as I am adding them to my monthly expense list
-4. As a user, I want to be able to view total expenses
-per category
+to my list of expenses. 
+2. As a user, I want to be able to add a description, dollar amount,
+category, month, and year to each expense as I am adding 
+them to my expense list.
+3. As a user, I want to be able to view all expenses in my 
+expense list. Each expense should output in format:
+
+
+    description-category-amount-month-year
+
+
+In addition, I want to be able to view the total money spent for ALL expenses. 
+
+
+    Total Costs: $$$$
+
+
+4. As a user, I want to be able to view all expenses for a 
+given month. Each expense should output in format:
+
+
+    description-category-amount-month-year
+
+
+In addition, I want to be able to view the total money spent 
+for that given MONTH. 
+
+
+    Total Costs: $$$$
+
+
+5. As a user, I want to be able to view total expenses
+per category and per month
 
 ### Phase 2 User Stories
 1. As a user, when I select the quit option from the application menu, 

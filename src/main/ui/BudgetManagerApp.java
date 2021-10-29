@@ -4,18 +4,15 @@ import model.Expense;
 import model.ExpenseManager;
 import model.enums.ExpenseCategory;
 import model.enums.Month;
-import model.exceptions.DescriptionException;
-import model.exceptions.InvalidCategoryException;
-import model.exceptions.InvalidMonthException;
-import model.exceptions.NegativeAmountException;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 //Budget manager Application
 //Code for interface based on CPSC 210 TellerApp
 public class BudgetManagerApp {
-    private ExpenseManager myExpenses;
+    private ExpenseManager budgetManager;
     private Scanner input;
 
     //EFFECTS: runs the budget manager application
@@ -46,15 +43,21 @@ public class BudgetManagerApp {
     //MODIFIES: this
     //EFFECTS: processes user command c
     public void processCommand(String c) {
-        if (c.equals("add")) {
-            addExpense();
-            System.out.println("ok i see u");
-        } else if (c.equals("tm")) {
-            //monthExpense();
-        } else if (c.equals("tmc")) {
-            //categoryMonthExpense();
-        } else {
-            System.out.println("\nMake a valid selection.");
+        switch (c) {
+            case "add":
+                addExpense();
+                break;
+            case "vis":
+                visualizeExpenses();
+            case "tm":
+                //monthExpense();
+                break;
+            case "tmc":
+                //categoryMonthExpense();
+                break;
+            default:
+                System.out.println("\nMake a valid selection.");
+                break;
         }
     }
 
@@ -62,22 +65,19 @@ public class BudgetManagerApp {
     //MODIFIES: this
     //EFFECTS: initializes an empty expense manager
     public void init() {
-        myExpenses = new ExpenseManager();
+        budgetManager = new ExpenseManager();
         input = new Scanner(System.in);
         input.useDelimiter("\n");
-
-        System.out.println("Please type your name below:");
-        String name = input.next();
-        System.out.println("\nHi " + name + "! Welcome to your budget manager.");
     }
 
     //EFFECTS: displays menu  of options to user
     public void displayMenu() {
         System.out.println("\nSelect from:");
-        System.out.println("\tadd   -> Add an expense to your budget manager");
-        System.out.println("\ttm  -> Look at the total money you have spent in a given month");
+        System.out.println("\tadd -> Add an expense to your budget manager");
+        System.out.println("\tvis -> Visualize ALL expenses added to your budget manager and cumulative money spent");
+        System.out.println("\ttm  -> Look at expenses and total money spent for a given month");
         System.out.println("\ttmc -> Look at the total money you spent for a category of expense in a given month");
-        System.out.println("\tq -> quit");
+        System.out.println("\tq   -> quit");
     }
 
     //MODIFIES: this
@@ -85,40 +85,35 @@ public class BudgetManagerApp {
     public void addExpense() {
         String description;
         double amount;
-        ExpenseCategory enumCategory;
-        String chosenMonth;
-        Month enumMonth;
+        ExpenseCategory category;
+        Month month;
         int year;
 
-        description = getDescription();
-        enumCategory = getExpenseCategory();
+        description = parseDescriptionInput();
+        category = parseCategoryInput();
+        amount = parseAmountInput();
+        month = parseMonthInput();
+        year = parseYear();
 
-        System.out.println("\nInput amount of expense (dollars):");
-        amount = input.nextDouble();
+        Expense newExpense = new Expense(description, amount, category, month, year);
+        budgetManager.addExpense(newExpense);
+        System.out.println("\n" + newExpense);
+        System.out.println("Expense added!");
+    }
 
-        System.out.println("\nInput month of expense, e");
+    //EFFECTS: prints all expenses in the user's list of expenses,
+    //         In addition, prints cumulative money spent
+    public void visualizeExpenses() {
+        List<Expense> expenses = budgetManager.getExpenses();
 
-        //date = chooseMonthHelper();
-
-       // System.out.println("\nCategory: " + category);
-        System.out.println("Amount: $" + amount);
-        //System.out.println("Date: " + date);
-
-        Expense newExpense = null;
-
-//        try {
-//            newExpense = new Expense("cool", amount, chosenEnum, Month.APRIL, 2021);
-//        } catch (DescriptionException e) {
-//            e.printStackTrace();
-//        } catch (NegativeAmountException e) {
-//            e.printStackTrace();
-//        } catch (InvalidCategoryException e) {
-//            e.printStackTrace();
-//        } catch (InvalidMonthException e) {
-//            e.printStackTrace();
-//        }
-        myExpenses.addExpense(newExpense);
-        System.out.println("Expense added!\n");
+        if (budgetManager.expensesIsEmpty()) {
+            System.out.println("Your expense list is empty");
+        } else {
+            for (Expense e : expenses) {
+                System.out.println(e);
+            }
+        }
+        System.out.println("Total Costs: " + budgetManager.total());
     }
 //
 //    //EFFECTS: returns total amount of money spent for a given month
@@ -157,6 +152,46 @@ public class BudgetManagerApp {
 //        return input.next();
 //    }
 
+    //HELPER METHODS BELOW
+
+    //EFFECTS: returns description chosen by user
+    public String parseDescriptionInput() {
+        System.out.println("\nInsert description for expense:");
+        String description = input.next();
+
+        while (!checkDescription(description)) {
+            System.out.println("\nInvalid description, length must be between 1 and 30 characters:");
+            description = input.next();
+        }
+        return description;
+    }
+
+    //EFFECTS: return true if myDescription.length() IS NOT > 30 characters, if it IS NOT empty,
+    //         or if string DOES NOT contain space only, false otherwise
+    public boolean checkDescription(String myDescription) {
+        return !(myDescription.length() > 30 || myDescription.isEmpty() || myDescription.equals(" "));
+    }
+
+    //EFFECTS: returns category chosen by user
+    public ExpenseCategory parseCategoryInput() {
+        String chosenCategory;
+        ExpenseCategory enumCategory;
+
+        System.out.println("\nChoose category for expense:");
+        System.out.println("Food, Rent, Medical, Clothing, Entertainment");
+        chosenCategory = input.next().toUpperCase(Locale.ROOT);
+
+        while (!checkCategory(chosenCategory)) {
+            System.out.println("\nInvalid category, try again:");
+            chosenCategory = input.next().toUpperCase(Locale.ROOT);
+        }
+
+        enumCategory = ExpenseCategory.valueOf(chosenCategory);
+        return enumCategory;
+    }
+
+    //EFFECTS: returns true if chosenCategory is associated with a valid ExpenseCategory enum,
+    //         false otherwise
     public boolean checkCategory(String chosenCategory) {
         try {
             ExpenseCategory.valueOf(chosenCategory.toUpperCase(Locale.ROOT));
@@ -167,39 +202,61 @@ public class BudgetManagerApp {
 
     }
 
-    //EFFECTS: return true if myDescription.length() > 30 characters, false otherwise
-    public boolean checkDescription(String myDescription) {
-        if (myDescription.length() > 30 || myDescription.isEmpty() || myDescription.equals(" ")) {
+    //EFFECTS: returns month chosen by user
+    public Month parseMonthInput() {
+        String chosenMonth;
+        Month enumMonth;
+
+        System.out.println("\nInput month of expense, e.g October.");
+        chosenMonth = input.next().toUpperCase(Locale.ROOT);
+
+        while (!checkMonth(chosenMonth)) {
+            System.out.println("\nInvalid input, try again:");
+            chosenMonth = input.next().toUpperCase(Locale.ROOT);
+        }
+        enumMonth = Month.valueOf(chosenMonth);
+        return enumMonth;
+    }
+
+    //EFFECTS: returns true if chosenMonth is associated with a valid Month enum,
+    //         false otherwise
+    public boolean checkMonth(String chosenMonth) {
+        try {
+            Month.valueOf(chosenMonth.toUpperCase(Locale.ROOT));
             return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-        return false;
+
     }
 
-    public String getDescription() {
-        System.out.println("\nInsert description for expense:");
-        String description = input.next();
-        while (checkDescription(description)) {
-            System.out.println("\nInvalid description, length must be between 1 and 30 characters:");
-            description = input.next();
+    //EFFECTS: returns amount chosen by user
+    public double parseAmountInput() {
+        double amount;
+
+        System.out.println("\nInput amount of expense (dollars):");
+
+        amount = input.nextDouble();
+
+        while (!checkAmount(amount)) {
+            System.out.println("\nInvalid input, dollar amount must be > 0");
+            amount = input.nextDouble();
         }
-        return description;
+        return amount;
     }
 
-    public ExpenseCategory getExpenseCategory() {
-        String chosenCategory;
-        ExpenseCategory enumCategory;
-
-        System.out.println("\nChoose category for expense:");
-        System.out.println("Food, Rent, Medical, Clothing, Entertainment");
-        chosenCategory = input.next().toUpperCase(Locale.ROOT);
-        while (!checkCategory(chosenCategory)) {
-            System.out.println("\nInvalid category, try again:");
-            chosenCategory = input.next().toUpperCase(Locale.ROOT);
-        }
-        enumCategory = ExpenseCategory.valueOf(chosenCategory.toUpperCase(Locale.ROOT));
-        return enumCategory;
+    //EFFECTS: returns true if amount > 0, false otherwise
+    public boolean checkAmount(double amount) {
+       //Double.parseDouble()
+        return amount > 0;
     }
 
-
+    //EFFECTS: returns year chosen by user
+    public int parseYear() {
+        int year;
+        System.out.println("\nInput year of expense:");
+        year = input.nextInt();
+        return year;
+    }
 
 }
