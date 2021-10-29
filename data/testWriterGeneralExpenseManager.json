@@ -1,0 +1,19 @@
+{
+    "user": "main user",
+    "expenses": [
+        {
+            "amount": 10,
+            "month": "APRIL",
+            "year": 2021,
+            "description": "shoe",
+            "category": "CLOTHING"
+        },
+        {
+            "amount": 10,
+            "month": "APRIL",
+            "year": 2021,
+            "description": "shoe",
+            "category": "CLOTHING"
+        }
+    ]
+}
