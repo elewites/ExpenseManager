@@ -52,7 +52,7 @@ In addition, I want to be able to view the total money spent for ALL expenses.
 
     Total Costs: $$$$
 
-
+*This user story below (#4) has not been implemented yet, will work on it after phase 2 submission*
 4. As a user, I want to be able to view all expenses for a 
 given month. Each expense should output in format:
 
