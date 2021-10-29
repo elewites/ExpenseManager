@@ -1,14 +1,11 @@
 package model;
 
-import model.enums.ExpenseCategory;
-import model.enums.Month;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistance.Writable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 // Represents a container where the user can add their expenses, and check the total money spent
 // for specific month or category
@@ -22,7 +19,6 @@ public class ExpenseManager implements Writable {
     public ExpenseManager() {
         user = "main user";
         expenses = new ArrayList<>();
-        //formattedExpenses = new ArrayList<>();
     }
 
     //EFFECTS: returns user
@@ -84,8 +80,7 @@ public class ExpenseManager implements Writable {
     }
 
 
-
-
+    //UNCOMMENTED CODE BELOW WILL BE USED IN LATER PHASES OF PROJECT
 
     /* REQUIRES: m must have the format "year-month", ex. "2000-04",
     *            in string "year-month", "-month" <= 12

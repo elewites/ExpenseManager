@@ -4,6 +4,7 @@ package persistance;
 
 import org.json.JSONObject;
 
+//Code for writable is based on JsonSerializationDemo repo from CPSC210
 public interface Writable {
     //EFFECTS: returns this as a JSON object
     JSONObject toJson();

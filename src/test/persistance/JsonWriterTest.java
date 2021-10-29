@@ -1,16 +1,16 @@
-package model;
+package persistance;
 
+import model.Expense;
+import model.ExpenseManager;
 import model.enums.ExpenseCategory;
 import model.enums.Month;
 import org.junit.jupiter.api.Test;
-import persistance.JsonReader;
-import persistance.JsonWriter;
-
 import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//Code for JasonWriterTest is based on JsonSerializationDemo repo from CPSC210
 public class JsonWriterTest {
 
     @Test

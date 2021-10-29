@@ -1,5 +1,6 @@
 package model.enums;
 
+//represents an ExpenseCategory
 public enum ExpenseCategory {
     FOOD("FOOD"),
     RENT("RENT"),

@@ -4,9 +4,8 @@ import model.ExpenseManager;
 import org.json.JSONObject;
 import java.io.*;
 
-//Code for persistence logic is based on JsonSerializationDemo repo from CPSC210
-
-//Represents a writer that writes data to JSON file
+// Represents a writer that writes data to JSON file
+// Code for writer is based on JsonSerializationDemo repo from CPSC210
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
@@ -25,7 +24,7 @@ public class JsonWriter {
     }
 
     //MODIFIES: this
-    //EFFECTS: writes JSON representation of ExpenseManager to file
+    //EFFECTS: writes JSON representation of expense manager to file
     public void write(ExpenseManager manager) {
         JSONObject json = manager.toJson();
         saveToFile(json.toString(TAB));

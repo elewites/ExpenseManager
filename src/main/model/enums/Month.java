@@ -1,5 +1,6 @@
 package model.enums;
 
+//Represents a month
 public enum Month {
     JANUARY("JANUARY"),
     FEBRUARY("FEBRUARY"),

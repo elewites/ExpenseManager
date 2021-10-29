@@ -67,6 +67,7 @@ for that given MONTH.
     Total Costs: $$$$
 
 
+*This user story below (#5) has not been implemented yet, will work on it after phase 2 submission*
 5. As a user, I want to be able to view total expenses
 per category and per month
 

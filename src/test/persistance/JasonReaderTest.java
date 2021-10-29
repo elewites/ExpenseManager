@@ -1,9 +1,10 @@
-package model;
+package persistance;
 
+import model.Expense;
+import model.ExpenseManager;
 import model.enums.ExpenseCategory;
 import model.enums.Month;
 import org.junit.jupiter.api.Test;
-import persistance.JsonReader;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +12,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class JsonReaderTest {
+//Code for JasonReaderTest is based on JsonSerializationDemo repo from CPSC210
+public class JasonReaderTest {
     @Test
     void testReaderNonExistentFile() {
         JsonReader reader = new JsonReader("./data/noSuchFile.json");
