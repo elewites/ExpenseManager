@@ -3,12 +3,14 @@ package model;
 
 import model.enums.ExpenseCategory;
 import model.enums.Month;
+import org.json.JSONObject;
+import persistance.Writable;
 
 /* Represents an expense with an amount in dollars,
  * category (food, rent, medical, clothing, entertainment), and
  * month in which that dollar amount was spent
  */
-public class Expense {
+public class Expense implements Writable {
     private String description;                //description of expense
     private double amount;                     //amount of money spent
     private ExpenseCategory category;          //category of expense
@@ -70,6 +72,17 @@ public class Expense {
                 + ", month: " + month
                 + ", year: " + year
                 + " }";
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("description", description);
+        json.put("amount", amount);
+        json.put("category", category);
+        json.put("month", month);
+        json.put("year", year);
+        return json;
     }
 
     //HELPERS BELOW

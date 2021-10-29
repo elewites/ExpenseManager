@@ -4,16 +4,20 @@ import model.Expense;
 import model.ExpenseManager;
 import model.enums.ExpenseCategory;
 import model.enums.Month;
+import persistance.JsonWriter;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 //Budget manager Application
-//Code for interface based on CPSC 210 TellerApp
+//Code for user interface based on CPSC 210 TellerApp
 public class BudgetManagerApp {
+    private static final String JSON_STORE = "data/workroom.json";
     private ExpenseManager budgetManager;
     private Scanner input;
+    private JsonWriter writer;
 
     //EFFECTS: runs the budget manager application
     public BudgetManagerApp() {
@@ -41,6 +45,15 @@ public class BudgetManagerApp {
     }
 
     //MODIFIES: this
+    //EFFECTS: initializes an empty expense manager
+    public void init() {
+        budgetManager = new ExpenseManager();
+        input = new Scanner(System.in);
+        input.useDelimiter("\n");
+        writer = new JsonWriter(JSON_STORE);
+    }
+
+    //MODIFIES: this
     //EFFECTS: processes user command c
     public void processCommand(String c) {
         switch (c) {
@@ -55,19 +68,13 @@ public class BudgetManagerApp {
             case "tmc":
                 //categoryMonthExpense();
                 break;
+            case "s":
+                saveExpenses();
+                break;
             default:
                 System.out.println("\nMake a valid selection.");
                 break;
         }
-    }
-
-
-    //MODIFIES: this
-    //EFFECTS: initializes an empty expense manager
-    public void init() {
-        budgetManager = new ExpenseManager();
-        input = new Scanner(System.in);
-        input.useDelimiter("\n");
     }
 
     //EFFECTS: displays menu  of options to user
@@ -75,8 +82,9 @@ public class BudgetManagerApp {
         System.out.println("\nSelect from:");
         System.out.println("\tadd -> Add an expense to your budget manager");
         System.out.println("\tvis -> Visualize ALL expenses added to your budget manager and cumulative money spent");
-        System.out.println("\ttm  -> Look at expenses and total money spent for a given month");
+        System.out.println("\tm   -> Look at expenses and total money spent for a given month");
         System.out.println("\ttmc -> Look at the total money you spent for a category of expense in a given month");
+        System.out.println("\ts   -> save expenses to file");
         System.out.println("\tq   -> quit");
     }
 
@@ -114,6 +122,18 @@ public class BudgetManagerApp {
             }
         }
         System.out.println("Total Costs: " + budgetManager.total());
+    }
+
+    //EFFECTS: saves expenses in budget manager to file
+    public void saveExpenses() {
+        try {
+            writer.open();
+            writer.write(budgetManager);
+            writer.close();
+            System.out.println("Expenses saved!");
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to save expenses to file: " + JSON_STORE);
+        }
     }
 //
 //    //EFFECTS: returns total amount of money spent for a given month

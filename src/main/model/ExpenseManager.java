@@ -2,6 +2,9 @@ package model;
 
 import model.enums.ExpenseCategory;
 import model.enums.Month;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistance.Writable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +12,22 @@ import java.util.Locale;
 
 // Represents a container where the user can add their expenses, and check the total money spent
 // for specific month or category
-public class ExpenseManager {
+public class ExpenseManager implements Writable {
+
     private List<Expense> expenses;               //list of expenses
     double totalCosts;                            //total money spent across ALL expenses
+    String user;                                  //user of this ExpenseManager
 
     //EFFECTS: initializes an expense manager with an empty array list
     public ExpenseManager() {
+        user = "main user";
         expenses = new ArrayList<>();
         //formattedExpenses = new ArrayList<>();
+    }
+
+    //EFFECTS: returns user
+    public String getUser() {
+        return user;
     }
 
     //EFFECTS: returns list of expenses
@@ -52,6 +63,27 @@ public class ExpenseManager {
         }
         return totalCosts;
     }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("user", user);
+        json.put("expenses", expensesToJson());
+        return json;
+    }
+
+    //EFFECTS: returns expenses in expense manager as a JSON array
+    private JSONArray expensesToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Expense e: expenses) {
+            jsonArray.put(e.toJson());
+        }
+
+        return jsonArray;
+    }
+
+
 
     /* REQUIRES: m must have the format "year-month", ex. "2000-04",
     *            in string "year-month", "-month" <= 12

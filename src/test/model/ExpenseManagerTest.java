@@ -67,6 +67,10 @@ public class ExpenseManagerTest {
         ExpenseManager expenseManager = new ExpenseManager();
         int len = expenseManager.getNumberOfExpenses();
         assertEquals(0, len);
+
+        String user = expenseManager.getUser();
+
+        assertEquals("user's workroom", user);
     }
 
     @Test
