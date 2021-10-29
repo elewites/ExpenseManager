@@ -6,6 +6,7 @@ import java.io.*;
 
 //Code for persistence logic is based on JsonSerializationDemo repo from CPSC210
 
+//Represents a writer that writes data to JSON file
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;

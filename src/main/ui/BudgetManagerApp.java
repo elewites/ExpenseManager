@@ -4,9 +4,11 @@ import model.Expense;
 import model.ExpenseManager;
 import model.enums.ExpenseCategory;
 import model.enums.Month;
+import persistance.JsonReader;
 import persistance.JsonWriter;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
@@ -14,10 +16,11 @@ import java.util.Scanner;
 //Budget manager Application
 //Code for user interface based on CPSC 210 TellerApp
 public class BudgetManagerApp {
-    private static final String JSON_STORE = "data/workroom.json";
+    private static final String JSON_STORE = "./data/expensemanager.json";
     private ExpenseManager budgetManager;
     private Scanner input;
     private JsonWriter writer;
+    private JsonReader reader;
 
     //EFFECTS: runs the budget manager application
     public BudgetManagerApp() {
@@ -51,6 +54,8 @@ public class BudgetManagerApp {
         input = new Scanner(System.in);
         input.useDelimiter("\n");
         writer = new JsonWriter(JSON_STORE);
+        reader = new JsonReader(JSON_STORE);
+
     }
 
     //MODIFIES: this
@@ -71,6 +76,9 @@ public class BudgetManagerApp {
             case "s":
                 saveExpenses();
                 break;
+            case "l":
+                loadWorkRoom();
+                break;
             default:
                 System.out.println("\nMake a valid selection.");
                 break;
@@ -85,6 +93,7 @@ public class BudgetManagerApp {
         System.out.println("\tm   -> Look at expenses and total money spent for a given month");
         System.out.println("\ttmc -> Look at the total money you spent for a category of expense in a given month");
         System.out.println("\ts   -> save expenses to file");
+        System.out.println("\tl   -> load expenses from file");
         System.out.println("\tq   -> quit");
     }
 
@@ -133,6 +142,17 @@ public class BudgetManagerApp {
             System.out.println("Expenses saved!");
         } catch (FileNotFoundException e) {
             System.out.println("Unable to save expenses to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads expense manager from file
+    private void loadWorkRoom() {
+        try {
+            budgetManager = reader.read();
+            System.out.println("Loaded expenses from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
         }
     }
 //

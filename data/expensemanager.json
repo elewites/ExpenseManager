@@ -1,0 +1,10 @@
+{
+    "user": "main user",
+    "expenses": [{
+        "amount": 100,
+        "month": "OCTOBER",
+        "year": 2021,
+        "description": "shoe",
+        "category": "RENT"
+    }]
+}
