@@ -25,7 +25,7 @@ public class ExpenseManager {
     }
 
     //EFFECTS: returns length of list of expenses
-    public int numberOfExpenses() {
+    public int getNumberOfExpenses() {
         return expenses.size();
     }
 
