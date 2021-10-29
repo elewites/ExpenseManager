@@ -2,6 +2,8 @@ package model;
 
 import model.enums.ExpenseCategory;
 import model.enums.Month;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -180,6 +182,47 @@ public class ExpenseManagerTest {
 
         assertFalse(expenseManager.expensesIsEmpty());
 
+    }
+
+    @Test
+    void testToJson() {
+        String description = "shoe";
+        double amount = 10;
+        ExpenseCategory category = ExpenseCategory.CLOTHING;
+        Month month = Month.APRIL;
+        int year = 2021;
+        Expense item = new Expense(description, amount, category, month, year);
+
+        //creating an expense manager as json object
+        //expense manager has one expense
+        JSONObject expectedManagerJson = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.put(item.toJson());
+        expectedManagerJson.put("user", "main user");
+        expectedManagerJson.put("expenses", jsonArray);
+
+        ExpenseManager manager = new ExpenseManager();
+        manager.addExpense(item);
+        JSONObject actualManagerJson = manager.toJson();
+
+       assertTrue(expectedManagerJson.get("user").equals(actualManagerJson.get("user")));
+
+       JSONArray expectedExpenses = expectedManagerJson.getJSONArray("expenses");
+       JSONArray actualExpenses = actualManagerJson.getJSONArray("expenses");
+
+       for (Object expectedExpense: expectedExpenses) {
+           for (Object actualExpense: actualExpenses) {
+               JSONObject expected = (JSONObject) expectedExpense;
+               JSONObject actual = (JSONObject) actualExpense;
+               assertTrue(expected.get("description").equals(actual.get("description")));
+               assertEquals(expected.get("amount"), actual.get("amount"));
+               assertTrue(expected.get("category").equals(actual.get("category")));
+               assertTrue(expected.get("month").equals(actual.get("month")));
+               assertTrue(expected.get("year").equals(actual.get("year")));
+           }
+       }
+
+      // assertTrue(expectedManagerJson.get("expenses").equals(actualManagerJson.get("expenses")));
     }
 
 //    @Test
