@@ -14,6 +14,34 @@
             "year": 2021,
             "description": "doctor",
             "category": "MEDICAL"
+        },
+        {
+            "amount": 200,
+            "month": "OCTOBER",
+            "year": 2021,
+            "description": "shoe",
+            "category": "MEDICAL"
+        },
+        {
+            "amount": 100,
+            "month": "JANUARY",
+            "year": 2021,
+            "description": "shoe",
+            "category": "FOOD"
+        },
+        {
+            "amount": 900,
+            "month": "MARCH",
+            "year": 2021,
+            "description": "broken arm",
+            "category": "MEDICAL"
+        },
+        {
+            "amount": 90,
+            "month": "SEPTEMBER",
+            "year": 2021,
+            "description": "ribs",
+            "category": "FOOD"
         }
     ]
 }

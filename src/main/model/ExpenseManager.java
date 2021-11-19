@@ -16,6 +16,7 @@ public class ExpenseManager implements Writable {
     private final List<Expense> expenses;               //list of expenses
     private final String user;                          //user of this ExpenseManager
 
+
     //EFFECTS: initializes an expense manager with an empty array list
     public ExpenseManager() {
         user = "main user";

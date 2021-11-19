@@ -210,10 +210,10 @@ public class ExpenseManagerTest {
         expenseManager.addExpense(itemThree);
         expenseManager.addExpense(itemFour);
 
-        List<Expense> filteredExpenses = expenseManager.getExpensesForDate("october", 2021);
+        List<Expense> filteredExpenses = expenseManager.getExpensesForDate("april", 2021);
         assertEquals(1, filteredExpenses.size());
 
-        assertEquals(itemTwo, filteredExpenses.get(0));
+        assertEquals(itemOne, filteredExpenses.get(0));
 
     }
 }

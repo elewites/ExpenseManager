@@ -1,11 +1,13 @@
 package ui.gui;
 
+import model.Expense;
 import model.ExpenseManager;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 //represents the frame that will pop up when the add expense button is pressed
 public class Popup extends JFrame {
@@ -13,6 +15,8 @@ public class Popup extends JFrame {
     private ListPanel mainPanel;
     private JButton searchButton;
     private ExpenseManager expenseManager;
+
+    private final Font font = new Font("Sans-serif", Font.PLAIN, 20);  //re-usable font
 
     //EFFECTS: constructs a frame with given width and height
     public Popup(int width, int height, ExpenseManager manager) {
@@ -52,7 +56,8 @@ public class Popup extends JFrame {
     private void searchButtonListener() {
         searchButton.addActionListener(e -> {
             String monthFilter = fetchInput("Filter expenses by month:");
-            String yearFilter = fetchInput("and year:");
+            int yearFilter = Integer.parseInt(fetchInput("and year:"));
+            this.addFilteredExpenses(monthFilter, yearFilter);
         });
     }
 
@@ -61,9 +66,24 @@ public class Popup extends JFrame {
         return JOptionPane.showInputDialog(this, message);
     }
 
-    //MODIFIES:
-    //EFFECTS:
+    //MODIFIES: this
+    //EFFECTS: adds filtered expenses to mainPanel
+    private void addFilteredExpenses(String monthFilter, int yearFilter) {
+        mainPanel.removeAll();
+        revalidate();
+        repaint();
+        List<Expense> filteredExpenses = expenseManager.getExpensesForDate(monthFilter, yearFilter);
+        for (Expense e: filteredExpenses) {
+            displayExpense(e);
+        }
+    }
 
-
+    //EFFECTS: displays Expense in listPanel
+    private void displayExpense(Expense e) {
+        JLabel label = new JLabel(e.toString());
+        label.setFont(font);
+        mainPanel.add(label);
+        revalidate();
+    }
 
 }
