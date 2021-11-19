@@ -1,4 +1,19 @@
 {
     "user": "main user",
-    "expenses": []
+    "expenses": [
+        {
+            "amount": 100,
+            "month": "OCTOBER",
+            "year": 2021,
+            "description": "eros",
+            "category": "MEDICAL"
+        },
+        {
+            "amount": 800,
+            "month": "OCTOBER",
+            "year": 2021,
+            "description": "doctor",
+            "category": "MEDICAL"
+        }
+    ]
 }

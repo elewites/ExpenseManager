@@ -1,19 +1,20 @@
 package model;
 
+import model.enums.Month;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistance.Writable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 // Represents a container where the user can add their expenses, and check the total money spent
 // for specific month or category
 public class ExpenseManager implements Writable {
 
-    private List<Expense> expenses;               //list of expenses
-    double totalCosts;                            //total money spent across ALL expenses
-    private String user;                                  //user of this ExpenseManager
+    private final List<Expense> expenses;               //list of expenses
+    private final String user;                          //user of this ExpenseManager
 
     //EFFECTS: initializes an expense manager with an empty array list
     public ExpenseManager() {
@@ -54,6 +55,7 @@ public class ExpenseManager implements Writable {
 
     //EFFECTS: returns total money spent across ALL expenses
     public double total() {
+        double totalCosts = 0;
         for (Expense e: expenses) {
             totalCosts += e.getAmount();
         }
@@ -61,6 +63,7 @@ public class ExpenseManager implements Writable {
     }
 
     @Override
+    //EFFECTS: returns this as a JSON object
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("user", user);
@@ -80,42 +83,38 @@ public class ExpenseManager implements Writable {
     }
 
 
-    //UNCOMMENTED CODE BELOW WILL BE USED IN LATER PHASES OF PROJECT
+    //EFFECTS: returns total money spent in given date
+    public double getMonthlyTotal(String month, int year) {
+        String monthUpper = month.toUpperCase(Locale.ROOT);
+        double total = 0;
+        for (Expense e: expenses) {
+            Month fetchedMonth = e.getMonth();
+            String fetchedMonthUpper = fetchedMonth.toString().toUpperCase(Locale.ROOT);
+            int fetchedYear = e.getYear();
 
-    /* REQUIRES: m must have the format "year-month", ex. "2000-04",
-    *            in string "year-month", "-month" <= 12
-    *  EFFECTS: returns total money spent in month m
-    */
-//    public double getMonthlyTotal(String m) {
-//        double total = 0;
-//        for (Expense e: expenses) {
-//            String expenseMonth = e.getMonth();
-//            double expenseAmount = e.getAmount();
-//            if (expenseMonth.equals(m)) {
-//                total += expenseAmount;
-//            }
-//        }
-//        return total;
-//    }
-//
-//    /*
-//     * REQUIRES: cat must be one of the following strings: food, rent, medical
-//     *           clothing, or entertainment, not case-sensitive;
-//     *           m must have the format "year-month",
-//     *           in string "year-month", "-month" <= 12
-//     * EFFECTS: returns total money spent for category cat and month m
-//     */
-//    public double getMonthlyTotalForCategory(String cat, String m) {
-//        double total = 0;
-//        for (Expense e: expenses) {
-//            String expenseMonth = e.getMonth();
-//            String expenseCategory = e.getCategory();
-//            double expenseAmount = e.getAmount();
-//            if (expenseMonth.equals(m) && expenseCategory.equals(cat.toLowerCase(Locale.ROOT))) {
-//                total += expenseAmount;
-//            }
-//        }
-//        return total;
-//    }
+            double expenseAmount = e.getAmount();
+            if (fetchedMonthUpper.equals(monthUpper) && fetchedYear == year) {
+                total += expenseAmount;
+            }
+        }
+        return total;
+    }
+
+    //EFFECTS: returns expenses that were purchased only in given date
+    public List<Expense> getExpensesForDate(String month, int year) {
+        List<Expense> filteredExpenses = new ArrayList<>();
+        String monthUpper = month.toUpperCase(Locale.ROOT);
+
+        for (Expense e: expenses) {
+            Month fetchedMonth = e.getMonth();
+            String fetchedMonthUpper = fetchedMonth.toString().toUpperCase(Locale.ROOT);
+            int fetchedYear = e.getYear();
+
+            if (fetchedMonthUpper.equals(monthUpper) && fetchedYear == year) {
+                filteredExpenses.add(e);
+            }
+        }
+        return filteredExpenses;
+    }
 
 }

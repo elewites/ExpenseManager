@@ -9,6 +9,8 @@ import persistance.JsonWriter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Locale;
@@ -16,21 +18,22 @@ import java.util.Locale;
 //represents the main frame for the budget manager app
 public class AppFrame extends JFrame {
     public static final int HEIGHT = 1000;      //height of frame
-    public static final int WIDTH = 1000;        //width of frame
-    public static final int SECOND_FRAME_HW = 500; //height and width of AddExpenseFrame
+    public static final int WIDTH = 1500;        //width of frame
+    public static final int SECOND_FRAME_HW = 900; //height and width of AddExpenseFrame
     public static final int PANEL_HEIGHT = 80;     //height of title bar and button panel
     private static final int TITLE_SIZE = 40;      //font size for title bar
 
     private static final String JSON_STORE = "./data/expensemanager.json";
 
-    private AddExpenseFrame popup;
+    private Popup popup;
     private TitleBarPanel titleBarPanel;
     private ButtonPanel buttonPanel;
-    private ExpenseListPanel listPanel;
+    private ListPanel listPanel;
     private JButton addExpenseButton;
     private JButton monthlyExpensesButton;
     private JButton saveExpensesButton;
     private JButton loadExpensesButton;
+    private JButton totalMoneySpentButton;
     private final Font font = new Font("Sans-serif", Font.PLAIN, 20);  //re-usable font
 
     private ExpenseManager expenseManager;
@@ -52,9 +55,11 @@ public class AppFrame extends JFrame {
         this.assignButtons();
 
         //listeners
-        this.addExpenseListener();
+        this.addExpenseButtonListener();
         this.saveExpensesListener();
-        this.loadExpensesListener();
+        this.loadExpensesButtonListener();
+        this.totalMoneySpentButtonListener();
+        this.monthlyExpensesButtonListener();
 
         this.setVisible(true);
     }
@@ -93,47 +98,45 @@ public class AppFrame extends JFrame {
         monthlyExpensesButton = buttonPanel.getMonthlyExpenses();
         saveExpensesButton = buttonPanel.getSaveExpenses();
         loadExpensesButton = buttonPanel.getLoadExpenses();
+        totalMoneySpentButton = buttonPanel.getTotalMoneySpent();
     }
 
     //MODIFIES: this
     //EFFECTS: adds list panel to the app frame
     private void addListPanel() {
-        listPanel = new ExpenseListPanel();
+        listPanel = new ListPanel(10, 1);
         this.add(listPanel, BorderLayout.CENTER);
     }
 
-//    //MODIFIES: this, buttonPanel
-//    //EFFECTS: adds event listener to add expense button;
-//    //         assigns an AddExpenseFrame to popup when add expense button is pressed;
-//    //         if !popup, pressing add expense button won't do anything;
-//    private void addExpenseListener() {
-//        addExpenseButton.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//                if (popup == null) {
-//                    popup = new AddExpenseFrame(SECOND_FRAME_HW, SECOND_FRAME_HW, expenseManager, list);
-//                    revalidate();
-//                }
-//                addWindowListenerToPopup();
-//            }
-//        });
-//    }
-//
-//    //MODIFIES: this
-//    //EFFECTS: sets popup to null when popup is closed
-//    private void addWindowListenerToPopup() {
-//        popup.addWindowListener(new WindowAdapter() {
-//            @Override
-//            public void windowClosing(WindowEvent e) {
-//                popup = null;
-//            }
-//        });
-//    }
+    //MODIFIES: this
+    //EFFECTS: listens for an event when monthlyExpensesButton is pressed;
+    //         then assigns a Popup to popup;
+    //         if !popup, pressing monthlyExpenseButton won't do anything;
+    private void monthlyExpensesButtonListener() {
+        monthlyExpensesButton.addActionListener(e -> {
+            if (popup == null) {
+                popup = new Popup(SECOND_FRAME_HW, SECOND_FRAME_HW, expenseManager);
+                revalidate();
+            }
+            windowListenerForPopup();
+        });
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets popup to null when popup is closed
+    private void windowListenerForPopup() {
+        popup.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                popup = null;
+            }
+        });
+    }
 
     //MODIFIES: this
     //EFFECTS: listens for an event when addExpenseButton is pressed;
     //         then it adds an Expense to expenseManager and displays it in listPanel
-    private void addExpenseListener() {
+    private void addExpenseButtonListener() {
         addExpenseButton.addActionListener(e -> {
             try {
                 Expense expense = createExpenseWithInputs();
@@ -143,7 +146,7 @@ public class AppFrame extends JFrame {
                         "Edit?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                         null, null, null);
                 if (confirm != 1) {
-                    addExpenseListener();
+                    addExpenseButtonListener();
                 }
                 expenseManager.addExpense(expense);
                 displayExpense(expense);
@@ -185,7 +188,6 @@ public class AppFrame extends JFrame {
         return JOptionPane.showInputDialog(this, message);
     }
 
-
     //MODIFIES: this
     //EFFECTS: listens for an event when saveExpensesButton is pressed
     private void saveExpensesListener() {
@@ -213,7 +215,7 @@ public class AppFrame extends JFrame {
     //EFFECTS: listens for an event when loadExpensesButton is pressed;
     //         loads expenseManager from file;
     //         then displays loaded expenses in listPanel
-    private void loadExpensesListener() {
+    private void loadExpensesButtonListener() {
         loadExpensesButton.addActionListener(e -> {
             int numOfExpenses = expenseManager.getNumberOfExpenses();
             this.loadWorkRoom();
@@ -238,5 +240,24 @@ public class AppFrame extends JFrame {
         }
     }
 
+    //MODIFIES: this
+    //EFFECTS: listens for an event when totalMoneySpentButton is pressed
+    private void totalMoneySpentButtonListener() {
+        totalMoneySpentButton.addActionListener(e -> {
+            try {
+                int numOfExpenses = expenseManager.getNumberOfExpenses();
+                double totalMoneySpent = expenseManager.total();
+                System.out.println(totalMoneySpent);
+                ListPanel panel = new ListPanel(2, 1);
+                JLabel labelOne = new JLabel("You've made " + numOfExpenses + " purchase/s");
+                JLabel labelTwo = new JLabel("You've spent $" + totalMoneySpent);
+                panel.add(labelOne);
+                panel.add(labelTwo);
+                JOptionPane.showMessageDialog(this, panel);
+            } catch (HeadlessException headlessException) {
+                headlessException.printStackTrace();
+            }
+        });
+    }
 
 }

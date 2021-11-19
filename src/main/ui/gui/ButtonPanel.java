@@ -10,10 +10,11 @@ public class ButtonPanel extends JPanel {
     private static final int BUTTON_WIDTH = 200;       //button width
     private static final int BUTTON_HEIGHT = 60;       //button height
 
-    private JButton addExpense;        //add expense button
-    private JButton saveExpenses;      //save expenses button
-    private JButton loadExpenses;      //load expenses button
-    private JButton monthlyExpenses;   //monthly expenses button
+    private final JButton addExpense;        //add expense button
+    private final JButton saveExpenses;      //save expenses button
+    private final JButton loadExpenses;      //load expenses button
+    private final JButton monthlyExpenses;   //monthly expenses button
+    private final JButton totalMoneySpent;        //total costs button
 
     //EFFECTS: constructs a panel of size width x height
     public ButtonPanel(int width, int height) {
@@ -23,9 +24,11 @@ public class ButtonPanel extends JPanel {
         saveExpenses = createButton("Save Expenses");
         loadExpenses = createButton("Load Expenses");
         monthlyExpenses = createButton("Monthly Expenses");
+        totalMoneySpent = createButton("Total Money Spent");
 
         this.add(addExpense);
         this.add(monthlyExpenses);
+        this.add(totalMoneySpent);
         this.add(saveExpenses);
         this.add(loadExpenses);
     }
@@ -59,4 +62,8 @@ public class ButtonPanel extends JPanel {
         return monthlyExpenses;
     }
 
+    //EFFECT: return totalMoneySpent button
+    public JButton getTotalMoneySpent() {
+        return totalMoneySpent;
+    }
 }

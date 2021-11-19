@@ -1,14 +1,12 @@
 package ui.gui;
 
-import sun.font.TrueTypeFont;
-
 import javax.swing.*;
 import java.awt.*;
 
 //represents a title bar panel
 public class TitleBarPanel extends JPanel {
 
-    private JLabel title;           //label for the title bar panel
+    private final JLabel title;           //label for the title bar panel
 
     //EFFECTS: constructs a panel of size width x height, with a title text and sets its font size
     public TitleBarPanel(int width, int height, String titleText, int fontSize) {
