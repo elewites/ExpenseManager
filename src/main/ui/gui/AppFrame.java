@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
 
 //represents the main frame for the budget manager app
@@ -34,7 +35,8 @@ public class AppFrame extends JFrame {
     private JButton saveExpensesButton;
     private JButton loadExpensesButton;
     private JButton totalMoneySpentButton;
-    private final Font font = new Font("Sans-serif", Font.PLAIN, 20);  //re-usable font
+    private final Font font = new Font("Sans-serif", Font.PLAIN, 18);  //re-usable font
+    private ArrayList<Image> imageList;
 
     private ExpenseManager expenseManager;
     private JsonWriter writer;
@@ -46,9 +48,15 @@ public class AppFrame extends JFrame {
         this.setSize(width, height);
         this.setDefaultCloseOperation(AppFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
+        this.setTitle("Budget Manager");
+
         expenseManager = new ExpenseManager();
         writer = new JsonWriter(JSON_STORE);
         reader = new JsonReader(JSON_STORE);
+
+        imageList = new ArrayList<>();
+        this.addImages();
+        this.setIconImages(imageList);
 
         //components
         this.addFrameComponents();
@@ -104,7 +112,7 @@ public class AppFrame extends JFrame {
     //MODIFIES: this
     //EFFECTS: adds list panel to the app frame
     private void addListPanel() {
-        listPanel = new ListPanel(10, 1);
+        listPanel = new ListPanel(20, 1, 10);
         this.add(listPanel, BorderLayout.CENTER);
     }
 
@@ -248,7 +256,7 @@ public class AppFrame extends JFrame {
                 int numOfExpenses = expenseManager.getNumberOfExpenses();
                 double totalMoneySpent = expenseManager.total();
                 System.out.println(totalMoneySpent);
-                ListPanel panel = new ListPanel(2, 1);
+                ListPanel panel = new ListPanel(2, 1, 5);
                 JLabel labelOne = new JLabel("You've made " + numOfExpenses + " purchase/s");
                 JLabel labelTwo = new JLabel("You've spent $" + totalMoneySpent);
                 panel.add(labelOne);
@@ -258,6 +266,27 @@ public class AppFrame extends JFrame {
                 headlessException.printStackTrace();
             }
         });
+    }
+
+    //EFFECTS: this
+    //MODIFIES: adds several images to imageList
+    private void addImages() {
+        addImage("./data/MoneyIcon4096.png");
+        addImage("./data/MoneyIcon64.png");
+        addImage("./data/MoneyIcon128.png");
+        addImage("./data/MoneyIcon256.png");
+    }
+
+    //EFFECTS: this
+    //MODIFIES: makes an Image from pnf file located at path and then adds it to imageList
+    private void addImage(String path) {
+        Image image = makeImage(path);
+        imageList.add(image);
+    }
+
+    //EFFECTS: makes an Image from png file located at path and returns it
+    private Image makeImage(String path) {
+        return new ImageIcon(path).getImage();
     }
 
 }

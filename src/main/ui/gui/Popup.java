@@ -37,7 +37,7 @@ public class Popup extends JFrame {
     //MODIFIES: this
     //EFFECTS: sets the main panel and adds it to the Popup frame
     private void setMainPanel() {
-        mainPanel = new ListPanel(10, 1);
+        mainPanel = new ListPanel(20, 1, 10);
         this.add(mainPanel, BorderLayout.CENTER);
     }
 
