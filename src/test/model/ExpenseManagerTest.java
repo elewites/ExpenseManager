@@ -182,10 +182,13 @@ public class ExpenseManagerTest {
                 new Expense("shoe", 20, ExpenseCategory.CLOTHING, Month.OCTOBER, 2021);
         Expense itemThree =
                 new Expense("shoe", 30, ExpenseCategory.CLOTHING, Month.SEPTEMBER, 2021);
+        Expense itemFour =
+                new Expense("shoe", 40, ExpenseCategory.CLOTHING, Month.APRIL, 2020);
         ExpenseManager expenseManager = new ExpenseManager();
         expenseManager.addExpense(itemOne);
         expenseManager.addExpense(itemTwo);
         expenseManager.addExpense(itemThree);
+        expenseManager.addExpense(itemFour);
 
         double totalForApril = 10;
         assertEquals(totalForApril, expenseManager.getMonthlyTotal("april", 2021));
@@ -199,10 +202,13 @@ public class ExpenseManagerTest {
                 new Expense("shoe", 20, ExpenseCategory.CLOTHING, Month.OCTOBER, 2021);
         Expense itemThree =
                 new Expense("shoe", 30, ExpenseCategory.CLOTHING, Month.SEPTEMBER, 2021);
+        Expense itemFour =
+                new Expense("shoe", 40, ExpenseCategory.CLOTHING, Month.APRIL, 2020);
         ExpenseManager expenseManager = new ExpenseManager();
         expenseManager.addExpense(itemOne);
         expenseManager.addExpense(itemTwo);
         expenseManager.addExpense(itemThree);
+        expenseManager.addExpense(itemFour);
 
         List<Expense> filteredExpenses = expenseManager.getExpensesForDate("october", 2021);
         assertEquals(1, filteredExpenses.size());
