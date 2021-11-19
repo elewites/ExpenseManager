@@ -13,9 +13,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
-//Budget manager Application
+//Budget manager Application with a console based interface
+//Inactive when app used with gui package
 //Code for user interface based on CPSC 210 TellerApp
-public class BudgetManagerApp {
+public class ConsoleBudgetManagerApp {
     private static final String JSON_STORE = "./data/expensemanager.json";
     private ExpenseManager budgetManager;
     private Scanner input;
@@ -23,7 +24,7 @@ public class BudgetManagerApp {
     private JsonReader reader;
 
     //EFFECTS: runs the budget manager application
-    public BudgetManagerApp() {
+    public ConsoleBudgetManagerApp() {
         runManager();
     }
 

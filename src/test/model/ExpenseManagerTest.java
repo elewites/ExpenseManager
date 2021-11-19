@@ -72,7 +72,7 @@ public class ExpenseManagerTest {
 
         String user = expenseManager.getUser();
 
-        assertEquals("user's workroom", user);
+        assertEquals("main user", user);
     }
 
     @Test

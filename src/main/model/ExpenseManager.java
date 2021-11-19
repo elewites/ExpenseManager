@@ -13,7 +13,7 @@ public class ExpenseManager implements Writable {
 
     private List<Expense> expenses;               //list of expenses
     double totalCosts;                            //total money spent across ALL expenses
-    String user;                                  //user of this ExpenseManager
+    private String user;                                  //user of this ExpenseManager
 
     //EFFECTS: initializes an expense manager with an empty array list
     public ExpenseManager() {
