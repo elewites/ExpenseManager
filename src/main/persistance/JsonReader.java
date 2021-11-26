@@ -74,8 +74,12 @@ public class JsonReader {
         Expense expense = new Expense(description, amount, category, month, year);
         manager.addExpense(expense);
 
-        //ask if this is where I should be doing this
-        //can't find another way to access the Expenses that are added to ExpenseManager when loading
+        /*
+        ask if this is where I should be doing this
+        can't find another way to access the Expenses that are added to ExpenseManager when loading.
+        This dependency is here because is the only way I could find of logging an event when expenses are
+        loaded from file.
+        */
         EventPrinter eventPrinter = new EventPrinter();
         eventPrinter.printMostRecentEvent();
     }

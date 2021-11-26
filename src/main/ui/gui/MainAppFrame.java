@@ -1,7 +1,5 @@
 package ui.gui;
 
-import model.Event;
-import model.EventLog;
 import model.Expense;
 import model.ExpenseManager;
 import model.enums.ExpenseCategory;
@@ -15,57 +13,48 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 
 //represents the main frame for the budget manager app
 public class MainAppFrame extends JFrame {
     public static final int HEIGHT = 1000;           //height of frame
     public static final int WIDTH = 1500;            //width of frame
-    public static final int SECOND_FRAME_HW = 900;   //height and width of AddExpenseFrame
+    public static final int SECOND_FRAME_HW = 900;   //height and width of Popup
     public static final int PANEL_HEIGHT = 80;       //height of title bar and button panel
     private static final int TITLE_SIZE = 40;        //font size for title bar
 
-    private static final String JSON_STORE = "./data/expensemanager.json";
+    private static final String JSON_STORE = "./data/expensemanager.json";     //json store
 
-    private Popup popup;
-    private TitleBarPanel titleBarPanel;
-    private ButtonPanel buttonPanel;
-    private ListPanel listPanel;
-    private JButton addExpenseButton;
-    private JButton monthlyExpensesButton;
-    private JButton saveExpensesButton;
-    private JButton loadExpensesButton;
-    private JButton totalMoneySpentButton;
+    private Popup popup;                            //popup used to search for filtered expenses
+    private ButtonPanel buttonPanel;                //button panel
+    private ListPanel listPanel;                    //list panel where expenses are displayed
+    private JButton addExpenseButton;               //add expense button
+    private JButton monthlyExpensesButton;          //button used to show popup
+    private JButton saveExpensesButton;             //save expenses button
+    private JButton loadExpensesButton;             //load expenses button
+    private JButton totalMoneySpentButton;          //total money spent button
+
     private final Font font = new Font("Sans-serif", Font.PLAIN, 18);  //re-usable font
-    private final ArrayList<Image> imageList;
 
-    private ExpenseManager expenseManager;
-    private final JsonWriter writer;
-    private final JsonReader reader;
+    private ExpenseManager expenseManager;          //ExpenseManager
+    private final JsonWriter writer;                //json writer used to write to JSON_STORE
+    private final JsonReader reader;                //json reader used to read from JSON_STORE
 
-    private EventPrinter eventPrinter = new EventPrinter();
-
+    private final EventPrinter eventPrinter = new EventPrinter();  //EventPrinter used to print events to console
+    private final Images images = new Images();                   //images used to setIconImages for the main app frame
 
     //EFFECTS: constructs a frame of size width x height pixels
     public MainAppFrame(int width, int height) {
-        this.setSize(width, height);
-        this.setDefaultCloseOperation(MainAppFrame.EXIT_ON_CLOSE);
-        this.setResizable(true);
-        this.setTitle("Budget Manager");
+        //MainAppFrame settings
+        this.setMainAppFrameSettings(width, height);
 
+        //initializes ExpenseManager, JsonWriter and JsonReader
         expenseManager = new ExpenseManager();
         writer = new JsonWriter(JSON_STORE);
         reader = new JsonReader(JSON_STORE);
 
-        imageList = new ArrayList<>();
-        this.addImages();
-        this.setIconImages(imageList);
-
         //add components to frame
         this.addFrameComponents();
-        this.assignButtons();
 
         //add listeners
         this.addExpenseButtonListener();
@@ -75,12 +64,18 @@ public class MainAppFrame extends JFrame {
         this.monthlyExpensesButtonListener();
         this.windowListenerForMainAppFrame();
 
+        //set frame visibility to true
         this.setVisible(true);
     }
 
-    //EFFECTS: returns expenseManager
-    public ExpenseManager getExpenseManager() {
-        return expenseManager;
+    //MODIFIES: this
+    //EFFECTS: sets the main app frame settings
+    private void setMainAppFrameSettings(int width, int height) {
+        this.setSize(width, height);
+        this.setDefaultCloseOperation(MainAppFrame.EXIT_ON_CLOSE);
+        this.setResizable(true);
+        this.setTitle("Budget Manager");
+        this.setIconImages(images.getImageList());
     }
 
     //MODIFIES: this
@@ -94,7 +89,8 @@ public class MainAppFrame extends JFrame {
     //MODIFIES: this
     //EFFECTS: adds a title bar to the top of the app frame
     private void addTitleBar() {
-        titleBarPanel = new TitleBarPanel(WIDTH, PANEL_HEIGHT, "Budget Manager", TITLE_SIZE);
+        //title bar panel
+        TitleBarPanel titleBarPanel = new TitleBarPanel(WIDTH, PANEL_HEIGHT, "Budget Manager", TITLE_SIZE);
         this.add(titleBarPanel, BorderLayout.NORTH);
     }
 
@@ -103,6 +99,7 @@ public class MainAppFrame extends JFrame {
     private void addButtonPanel() {
         buttonPanel = new ButtonPanel(WIDTH, PANEL_HEIGHT);
         this.add(buttonPanel, BorderLayout.SOUTH);
+        assignButtons();
     }
 
     //MODIFIES: this
@@ -122,6 +119,9 @@ public class MainAppFrame extends JFrame {
         this.add(listPanel, BorderLayout.CENTER);
     }
 
+
+    /*BUTTON LISTENERS BELOW AND HELPERS FOR BUTTON LISTENERS*/
+
     //MODIFIES: this
     //EFFECTS: listens for an event when monthlyExpensesButton is pressed;
     //         then assigns a Popup to popup;
@@ -133,27 +133,6 @@ public class MainAppFrame extends JFrame {
                 revalidate();
             }
             windowListenerForPopup();
-        });
-    }
-
-    //MODIFIES: this
-    //EFFECTS: sets popup to null when popup is closed
-    private void windowListenerForPopup() {
-        popup.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                popup = null;
-            }
-        });
-    }
-
-    //EFFECTS: prints EventLog to the console when MainAppFrame is closed
-    private void windowListenerForMainAppFrame() {
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                eventPrinter.printEvents();
-            }
         });
     }
 
@@ -217,9 +196,7 @@ public class MainAppFrame extends JFrame {
     //MODIFIES: this
     //EFFECTS: listens for an event when saveExpensesButton is pressed
     private void saveExpensesListener() {
-        saveExpensesButton.addActionListener(e -> {
-            this.saveExpenses();
-        });
+        saveExpensesButton.addActionListener(e -> this.saveExpenses());
     }
 
     //EFFECTS: saves expenses in budget manager to file
@@ -230,13 +207,12 @@ public class MainAppFrame extends JFrame {
             writer.close();
             JOptionPane.showMessageDialog(this,"Expenses saved!");
             System.out.println("Expenses saved!");
-            System.out.println("");
+            System.out.println(" ");
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Unable to save expenses to file");
             System.out.println("Unable to save expenses to file: " + JSON_STORE);
         }
     }
-
 
     //MODIFIES: this
     //EFFECTS: listens for an event when loadExpensesButton is pressed;
@@ -258,11 +234,9 @@ public class MainAppFrame extends JFrame {
     // EFFECTS: loads expense manager from file
     private void loadWorkRoom() {
         try {
-            int numOfEventsBeforeLoading = expenseManager.getNumberOfExpenses();
             expenseManager = reader.read();
-            int numOfEventsAfterLoading = expenseManager.getNumberOfExpenses();
-            int numOfEventsAddedToLog = numOfEventsAfterLoading - numOfEventsBeforeLoading;
-            //System.out.println("Loaded expenses from " + JSON_STORE);
+            System.out.println("Loaded expenses from " + JSON_STORE);
+            System.out.println(" ");
             JOptionPane.showMessageDialog(this,"Expenses loaded!");
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);
@@ -290,25 +264,27 @@ public class MainAppFrame extends JFrame {
         });
     }
 
-    //EFFECTS: this
-    //MODIFIES: adds several images to imageList
-    private void addImages() {
-        addImage("./data/MoneyIcon4096.png");
-        addImage("./data/MoneyIcon64.png");
-        addImage("./data/MoneyIcon128.png");
-        addImage("./data/MoneyIcon256.png");
+
+    /*WINDOW LISTENERS BELOW*/
+
+    //MODIFIES: this
+    //EFFECTS: sets popup to null when popup is closed
+    private void windowListenerForPopup() {
+        popup.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                popup = null;
+            }
+        });
     }
 
-    //EFFECTS: this
-    //MODIFIES: makes an Image from pnf file located at path and then adds it to imageList
-    private void addImage(String path) {
-        Image image = makeImage(path);
-        imageList.add(image);
+    //EFFECTS: prints EventLog to the console when MainAppFrame is closed
+    private void windowListenerForMainAppFrame() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventPrinter.printEvents();
+            }
+        });
     }
-
-    //EFFECTS: makes an Image from png file located at path and returns it
-    private Image makeImage(String path) {
-        return new ImageIcon(path).getImage();
-    }
-
 }
