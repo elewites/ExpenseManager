@@ -8,7 +8,7 @@ public enum ExpenseCategory {
     CLOTHING("CLOTHING"),
     ENTERTAINMENT("ENTERTAINMENT");
 
-    private String category;   //represents enum as a string
+    private final String category;   //represents enum as a string
 
     //EFFECTS: constructs an enum and associates it with a string category
     ExpenseCategory(String category) {

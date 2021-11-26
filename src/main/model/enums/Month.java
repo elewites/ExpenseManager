@@ -15,7 +15,7 @@ public enum Month {
     NOVEMBER("NOVEMBER"),
     DECEMBER("DECEMBER");
 
-    private String month;    //represents enum as a string
+    private final String month;    //represents enum as a string
 
     //EFFECTS: constructs an enum and associates it with a string cat
     Month(String m) {

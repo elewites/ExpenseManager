@@ -11,11 +11,11 @@ import persistance.Writable;
  * month in which that dollar amount was spent
  */
 public class Expense implements Writable {
-    private String description;                //description of expense
-    private double amount;                     //amount of money spent
-    private ExpenseCategory category;          //category of expense
-    private Month month;                       //month in which amount was spent
-    private int year;                          //year in which amount was spent
+    private final String description;                //description of expense
+    private final double amount;                     //amount of money spent
+    private final ExpenseCategory category;          //category of expense
+    private final Month month;                       //month in which amount was spent
+    private final int year;                          //year in which amount was spent
 
     /* REQUIRES: chosenDescription.length() <= 30, !chosenDescription.isEmpty(), !myDescription.equals(" ");
      *           expenseAmount > 0;

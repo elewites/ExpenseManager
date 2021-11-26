@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-// Represents a container where the user can add their expenses, and check the total money spent
-// for specific month or category
+// Represents a container where the user can add their expenses;
+// Here the user can check the total money spent across all expenses;
+// The user can also for specific month or category
 public class ExpenseManager implements Writable {
 
     private final List<Expense> expenses;               //list of expenses
     private final String user;                          //user of this ExpenseManager
-
 
     //EFFECTS: initializes an expense manager with an empty array list
     public ExpenseManager() {
@@ -39,9 +39,11 @@ public class ExpenseManager implements Writable {
     }
 
     //MODIFIES: this
-    //EFFECTS: adds expense e to list of expenses
+    //EFFECTS: adds expense e to list of expenses;
+    //         then adds an event to event log
     public void addExpense(Expense e) {
         expenses.add(e);
+        EventLog.getInstance().logEvent(new Event("New Expense added to expense manager"));
     }
 
     //EFFECTS: returns expense at index i
@@ -75,16 +77,13 @@ public class ExpenseManager implements Writable {
     //EFFECTS: returns expenses in expense manager as a JSON array
     private JSONArray expensesToJson() {
         JSONArray jsonArray = new JSONArray();
-
         for (Expense e: expenses) {
             jsonArray.put(e.toJson());
         }
-
         return jsonArray;
     }
 
-
-    //EFFECTS: returns total money spent in given date
+    //EFFECTS: returns total money spent in given date (month-year)
     public double getMonthlyTotal(String month, int year) {
         String monthUpper = month.toUpperCase(Locale.ROOT);
         double total = 0;
@@ -101,7 +100,7 @@ public class ExpenseManager implements Writable {
         return total;
     }
 
-    //EFFECTS: returns expenses that were purchased only in given date
+    //EFFECTS: returns list of expenses that were purchased only in given date (month-year)
     public List<Expense> getExpensesForDate(String month, int year) {
         List<Expense> filteredExpenses = new ArrayList<>();
         String monthUpper = month.toUpperCase(Locale.ROOT);

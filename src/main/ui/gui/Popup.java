@@ -5,8 +5,6 @@ import model.ExpenseManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 //represents the frame that will pop up when the add expense button is pressed
@@ -47,7 +45,7 @@ public class Popup extends JFrame {
         searchButton = new JButton("Search");
         searchButton.setFont(new Font("Sans-serif", Font.PLAIN, 40));
         searchButton.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        searchButton.setPreferredSize((new Dimension(AppFrame.SECOND_FRAME_HW, 90)));
+        searchButton.setPreferredSize((new Dimension(MainAppFrame.SECOND_FRAME_HW, 90)));
         this.add(searchButton, BorderLayout.NORTH);
     }
 

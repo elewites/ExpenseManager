@@ -6,6 +6,7 @@ import model.enums.ExpenseCategory;
 import model.enums.Month;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import ui.gui.EventPrinter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -72,5 +73,10 @@ public class JsonReader {
 
         Expense expense = new Expense(description, amount, category, month, year);
         manager.addExpense(expense);
+
+        //ask if this is where I should be doing this
+        //can't find another way to access the Expenses that are added to ExpenseManager when loading
+        EventPrinter eventPrinter = new EventPrinter();
+        eventPrinter.printMostRecentEvent();
     }
 }

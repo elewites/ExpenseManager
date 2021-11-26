@@ -1,5 +1,7 @@
 package ui.gui;
 
+import model.Event;
+import model.EventLog;
 import model.Expense;
 import model.ExpenseManager;
 import model.enums.ExpenseCategory;
@@ -14,15 +16,16 @@ import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Locale;
 
 //represents the main frame for the budget manager app
-public class AppFrame extends JFrame {
-    public static final int HEIGHT = 1000;      //height of frame
-    public static final int WIDTH = 1500;        //width of frame
-    public static final int SECOND_FRAME_HW = 900; //height and width of AddExpenseFrame
-    public static final int PANEL_HEIGHT = 80;     //height of title bar and button panel
-    private static final int TITLE_SIZE = 40;      //font size for title bar
+public class MainAppFrame extends JFrame {
+    public static final int HEIGHT = 1000;           //height of frame
+    public static final int WIDTH = 1500;            //width of frame
+    public static final int SECOND_FRAME_HW = 900;   //height and width of AddExpenseFrame
+    public static final int PANEL_HEIGHT = 80;       //height of title bar and button panel
+    private static final int TITLE_SIZE = 40;        //font size for title bar
 
     private static final String JSON_STORE = "./data/expensemanager.json";
 
@@ -36,17 +39,19 @@ public class AppFrame extends JFrame {
     private JButton loadExpensesButton;
     private JButton totalMoneySpentButton;
     private final Font font = new Font("Sans-serif", Font.PLAIN, 18);  //re-usable font
-    private ArrayList<Image> imageList;
+    private final ArrayList<Image> imageList;
 
     private ExpenseManager expenseManager;
-    private JsonWriter writer;
-    private JsonReader reader;
+    private final JsonWriter writer;
+    private final JsonReader reader;
+
+    private EventPrinter eventPrinter = new EventPrinter();
 
 
     //EFFECTS: constructs a frame of size width x height pixels
-    public AppFrame(int width, int height) {
+    public MainAppFrame(int width, int height) {
         this.setSize(width, height);
-        this.setDefaultCloseOperation(AppFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(MainAppFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
         this.setTitle("Budget Manager");
 
@@ -58,16 +63,17 @@ public class AppFrame extends JFrame {
         this.addImages();
         this.setIconImages(imageList);
 
-        //components
+        //add components to frame
         this.addFrameComponents();
         this.assignButtons();
 
-        //listeners
+        //add listeners
         this.addExpenseButtonListener();
         this.saveExpensesListener();
         this.loadExpensesButtonListener();
         this.totalMoneySpentButtonListener();
         this.monthlyExpensesButtonListener();
+        this.windowListenerForMainAppFrame();
 
         this.setVisible(true);
     }
@@ -141,6 +147,16 @@ public class AppFrame extends JFrame {
         });
     }
 
+    //EFFECTS: prints EventLog to the console when MainAppFrame is closed
+    private void windowListenerForMainAppFrame() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                eventPrinter.printEvents();
+            }
+        });
+    }
+
     //MODIFIES: this
     //EFFECTS: listens for an event when addExpenseButton is pressed;
     //         then it adds an Expense to expenseManager and displays it in listPanel
@@ -157,6 +173,7 @@ public class AppFrame extends JFrame {
                     addExpenseButtonListener();
                 }
                 expenseManager.addExpense(expense);
+                eventPrinter.printMostRecentEvent();
                 displayExpense(expense);
 
             } catch (HeadlessException headlessException) {
@@ -193,6 +210,7 @@ public class AppFrame extends JFrame {
 
     //EFFECTS: returns user input as a string
     private String fetchInput(String message) {
+        //UIManager.put("OptionPane.minimumSize",new Dimension(500,500));
         return JOptionPane.showInputDialog(this, message);
     }
 
@@ -212,6 +230,7 @@ public class AppFrame extends JFrame {
             writer.close();
             JOptionPane.showMessageDialog(this,"Expenses saved!");
             System.out.println("Expenses saved!");
+            System.out.println("");
         } catch (FileNotFoundException e) {
             JOptionPane.showMessageDialog(this, "Unable to save expenses to file");
             System.out.println("Unable to save expenses to file: " + JSON_STORE);
@@ -239,8 +258,11 @@ public class AppFrame extends JFrame {
     // EFFECTS: loads expense manager from file
     private void loadWorkRoom() {
         try {
+            int numOfEventsBeforeLoading = expenseManager.getNumberOfExpenses();
             expenseManager = reader.read();
-            System.out.println("Loaded expenses from " + JSON_STORE);
+            int numOfEventsAfterLoading = expenseManager.getNumberOfExpenses();
+            int numOfEventsAddedToLog = numOfEventsAfterLoading - numOfEventsBeforeLoading;
+            //System.out.println("Loaded expenses from " + JSON_STORE);
             JOptionPane.showMessageDialog(this,"Expenses loaded!");
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);

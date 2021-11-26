@@ -1,4 +1,4 @@
-package ui;
+package ui.consoleuserinterface;
 
 import model.Expense;
 import model.ExpenseManager;
