@@ -3,7 +3,6 @@ package ui.gui;
 import model.Event;
 import model.EventLog;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
