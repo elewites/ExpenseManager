@@ -66,7 +66,7 @@ I want to be reminded to save the changes made to my budget manager.
 the option to load my expenses from file through a load file button. 
 
 
-### Phase 4: Task 2
+### Phase 3 & 4
 The EventLog class was a component of this project which was 
 implemented in Phase 4. 
 
